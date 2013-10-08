@@ -64,6 +64,27 @@ class python-poppler {
  
 }
 
+class python-lxml-requirements {
+
+    package { 'python2.7-dev' :
+      ensure => installed
+    }
+    
+    package { 'libxml2-dev' :
+      ensure => installed
+    }
+
+    package { 'libxslt1-dev' :
+      ensure => installed
+    }
+
+    package { 'lib32z1-dev' :
+      ensure => installed
+    }
+
+}
+
 include scraperwiki-raring-backports
 include scraperwiki-minimal-packages
 include python-poppler
+include python-lxml-requirements
