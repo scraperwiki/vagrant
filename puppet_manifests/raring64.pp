@@ -12,18 +12,58 @@ file { '/etc/motd':
 class scraperwiki-raring-backports {
     
     exec { 'add-backports-repository':
-    command => 'add-apt-repository ppa:scraperwiki/raring-backports',
-    path => '/usr/bin/',
+      command => 'add-apt-repository ppa:scraperwiki/raring-backports',
+      path => '/usr/bin/',
     }
     
     exec { 'apt-get update':
-    command => '/usr/bin/apt-get update',
-    require => Exec['add-backports-repository']
-    }
-    
-    package { 'libpoppler-glib8':
-    ensure => '0.24.1-0ubuntu2~raring1',
-    require => Exec['apt-get update'],
+      command => '/usr/bin/apt-get update',
+      require => Exec['add-backports-repository']
     }
 }
+
+class scraperwiki-minimal-packages {
+
+    package { 'language-pack-en':
+      ensure => installed,
+      require => Exec['apt-get update'],
+    }
+   
+    package { 'git':
+      ensure => 'installed',
+      require => Exec['apt-get update'],
+    }
+    
+    package { 'vim-nox':
+      ensure => 'installed',
+      require => Exec['apt-get update'],
+    }
+
+    package { 'python-virtualenv':
+      ensure => 'installed',
+      require => Exec['apt-get update'],
+    }
+}
+
+class python-poppler {
+
+    package { 'libpoppler-glib8':
+      ensure => '0.24.1-0ubuntu2~raring1',
+      require => Exec['apt-get update'],
+    }
+    
+    package { 'python-poppler':
+      ensure => installed,
+      require => Exec['apt-get update'],
+    }
+    
+    package { 'python-cairo':
+      ensure => installed,
+      require => Exec['apt-get update'],
+    }
+ 
+}
+
 include scraperwiki-raring-backports
+include scraperwiki-minimal-packages
+include python-poppler
